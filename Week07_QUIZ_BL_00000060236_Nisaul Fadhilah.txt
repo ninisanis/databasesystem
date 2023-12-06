@@ -1,0 +1,148 @@
+cd C:\xampp\mysql\bin
+mysql -h localhost -u root
+
+CREATE DATABASE Restoran;
+
+USE Restoran;
+
+
+CREATE TABLE Employee(
+id_employee VARCHAR(5) PRIMARY KEY,
+nama_depan VARCHAR(30) NOT NULL,
+nama_belakang VARCHAR(30),
+jabatan VARCHAR(30) NOT NULL,
+alamat VARCHAR(30) NOT NULL,
+email VARCHAR(30) NOT NULL,
+nomor_telepon VARCHAR(15) NOT NULL,
+gaji INTEGER
+);
+
+
+CREATE TABLE Customer(
+id_customer VARCHAR(5) PRIMARY KEY,
+nama_depan VARCHAR(30) NOT NULL,
+nama_belakang VARCHAR(30),
+alamat VARCHAR(30) NOT NULL,
+email VARCHAR(30) NOT NULL,
+nomor_telepon VARCHAR(15) NOT NULL
+);
+
+CREATE TABLE Paket(
+id_paket VARCHAR(5) PRIMARY KEY,
+harga_paket INTEGER
+);
+
+CREATE TABLE Menu(
+id_menu VARCHAR(5) PRIMARY KEY,
+nama_menu VARCHAR(30) NOT NULL,
+jenis_menu VARCHAR(20) NOT NULL,
+id_paket VARCHAR(5),
+FOREIGN KEY (id_paket) REFERENCES Paket (id_paket)
+);
+
+CREATE TABLE Transaction(
+id_customer VARCHAR(5),
+id_paket VARCHAR(5),
+id_employee VARCHAR(5),
+transaction_date DATE,
+PRIMARY KEY (ID_Customer, ID_Paket, ID_Employee),
+FOREIGN KEY (id_customer) REFERENCES Customer (id_customer),
+FOREIGN KEY (id_paket) REFERENCES Paket (id_paket),
+FOREIGN KEY (id_employee) REFERENCES Employee (id_employee)
+);
+
+INSERT INTO Employee(id_employee, nama_depan, nama_belakang, jabatan, alamat, email, nomor_telepon, gaji)
+VALUES('E0001', 'Anthony', NULL, 'Manager', '70 Cool Guy', 'anthony@umn.ac.id', '123-456-4564',
+5000000 ),
+('E0002', 'Akino', 'Archilles', 'Chef', '21 Kino Kino', 'akino@student.com', '354-124-5786',
+3500000),
+('E0003', 'Kevin', 'Alexander', 'Cashier', '34 Nishinoya', 'alex@yahoo.com', '098-123-7832',
+3000000 ),
+('E0004', 'Ivy', 'Marcia', 'Chef', '06 Wall Street', 'ivy@yahoo.com', '846-732-8427', 3500000 ),
+('E0005', 'Martha', 'Saphia', 'Customer Service', '78 Ruby Fort', 'martha@umn.ac.id', '718-298-2873', 3200000 ),
+('E0006', 'Nofiandy', NULL, 'Cashier', '03 Smooth Hair', 'nofiandy@gmail.com', '516-927-9268',3250000 ),
+('E0007', 'Octavany', NULL, 'Cashier', '23 Relaxing Cafe', 'ocat@iseng.com', '654-876-1928',3150000 );
+
+INSERT INTO Customer(id_customer, nama_depan, nama_belakang, alamat, email, nomor_telepon)
+VALUES('C0001', 'Michael', 'Oswin', '125 Laugh Land', 'oswin@yahoo.com', '745-387-2874 '),
+('C0002', 'Anna', 'Jeane', '163 Lolita Land', 'anna@gmail.com','982-397-4862'),
+('C0003', 'Raymond', NULL, '287 Chucky Suburb', 'raymond@gmail.com', '917-376-4672' ),
+('C0004', 'Theodore', 'Mulia', '287 Idea Annex', 'mulia@gmail.com', '122-187-1111' ),
+('C0005', 'Niki', 'Emersan', '297 Cult Annex', 'niki@yahoo.com', '198-292-2223' ),
+('C0006', 'Christine', 'Liviani', '275 Love Annex', 'liviani@live.com', '000-198-2836' ),
+('C0007', 'Hermawan', NULL, '212 Tall Building', 'hermawan@yahoo.com', '192-168-1001' ),
+('C0008', 'Agung', NULL, '293 Short Building', 'agung@yahoo.com', '192-168-1993' ),
+('C0009', 'Samuel', 'Sandro', '206 Oppa Annex', 'sam@live.com', '192-168-2973' ),
+('C0010', 'Kennard', 'Alcander', '202 Brother Annex', 'ken@live.com', '198-782-3864' );
+
+INSERT INTO Paket(id_paket, harga_paket)
+VALUES('P0001', 3000000 ),
+('P0002', 2500000 ),
+('P0003', 2000000 );
+
+INSERT INTO Menu(id_menu, nama_menu, jenis_menu, id_paket)
+VALUES('M0001', 'Nasi Goreng Cinta', 'Makanan', 'P0001'),
+('M0002', 'Ayam Bumbu PHP', 'Makanan', 'P0002'),
+('M0003', 'Soto Daging CPP', 'Makanan', 'P0003'),
+('M0004', 'Siomay Pak BoBi', 'Makanan', 'P0001'),
+('M0005', 'Blue Integer', 'Minuman', 'P0001'),
+('M0006', 'Mocha Float', 'Dessert', 'P0003'),
+('M0007', 'Choco Banana Split', 'Dessert', 'P0002'),
+('M0008', 'Es Teh Panas', 'Minuman', 'P0002'),
+('M0009', 'Nasi Micin', 'Makanan', 'P0002'),
+('M0010', 'Sapi Chabe', 'Makanan', 'P0003');
+
+INSERT INTO Transaction(id_customer, id_paket, id_employee, transaction_date)
+VALUES('C0001', 'P0003', 'E0002', '2016-02-25' ),
+('C0002', 'P0002', 'E0001', '2016-03-12' ),
+('C0003', 'P0002', 'E0002', '2016-04-10' ),
+('C0004', 'P0001', 'E0004', '2016-06-28' ),
+('C0005', 'P0002', 'E0001', '2016-03-30'),
+('C0006', 'P0003', 'E0003', '2016-03-10' ),
+('C0007', 'P0001', 'E0005', '2016-03-01' ),
+('C0008', 'P0002', 'E0002', '2016-08-30' ),
+('C0009', 'P0003', 'E0002', '2016-11-02' ),
+('C0010', 'P0001', 'E0005', '2016-08-18' );
+
+
+7. 
+
+SELECT CONCAT('Permukaan Bumi terdiri dari',' ', TRUNCATE( 510072000 * 29.2/ 100, 0), 'km2 dataran dan', ' ', TRUNCATE(510072000 * 70.8/ 100, 0), 'km2 lautan') "Permukaan Bumi";
+
+8. 
+
+UPDATE Employee
+SET email = LOWER(CONCAT(IF(nama_belakang IS NOT NULL, CONCAT(LEFT(nama_depan, 3), RIGHT(nama_belakang, 3)), nama_depan), '@employee.restoran.id'));
+
+SELECT CASE
+WHEN nama_belakang IS NOT NULL THEN CONCAT(nama_depan, ' ', nama_belakang)
+ELSE nama_depan
+END 'Nama Lengkap', email Email
+FROM Employee;
+
+9.
+
+SELECT IF(Customer.nama_belakang IS NOT NULL, CONCAT(Customer.nama_depan, ' ', Customer.nama_belakang), Customer.nama_depan) AS 'Customer',
+IF(Employee.nama_belakang IS NOT NULL, CONCAT(Employee.nama_depan, ' ', Employee.nama_belakang), Employee.nama_depan) AS 'Karyawan Pengurus',
+Paket.id_paket AS 'Nomor Paket', CONCAT('Rp ', Paket.harga_paket) AS 'Harga', DATE_FORMAT(Transaction.transaction_date, '%d %M %Y') AS 'Tanggal Transaksi'
+FROM Employee, Customer, Transaction, Paket
+WHERE Employee.id_employee=Transaction.id_employee AND Transaction.id_paket=Paket.id_paket AND Customer.id_customer=Transaction.id_customer
+ORDER BY Transaction.transaction_date;
+
+10.
+
+SELECT IF(Customer.nama_belakang IS NOT NULL, CONCAT(Customer.nama_depan, ' ', Customer.nama_belakang), Customer.nama_depan) AS 'Nama Depan',
+CONCAT('Rp ', Paket.harga_paket) AS 'Harga', Transaction.transaction_date AS 'Transaction Date'
+FROM Customer, Transaction, Paket
+WHERE Transaction.id_paket=Paket.id_paket AND Customer.id_customer=Transaction.id_customer
+ORDER BY Transaction.transaction_date ASC
+LIMIT 3, 5;
+
+11.
+
+SELECT CONCAT((LPAD(RIGHT(nama_depan, LENGTH(nama_depan)/2 + 1), LENGTH(nama_depan), "*")), IF(nama_belakang IS NOT NULL, CONCAT(' ', RPAD(LEFT(nama_belakang, IF(LENGTH(nama_belakang)/2 = 0, LENGTH(nama_belakang)/2, LENGTH(nama_belakang)/2 - 1)), LENGTH(nama_belakang), '*')), ''))
+AS 'Enkripsi'
+FROM Customer;
+
+
+

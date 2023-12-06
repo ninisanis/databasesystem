@@ -1,0 +1,138 @@
+Nama: Nisa'ul Fadhilah
+NIM	: 00000060236
+
+cd C:\xampp\mysql\bin
+mysql -h localhost -u root
+
+1.
+
+CREATE DATABASE pemilu;
+
+USE pemilu;
+
+
+CREATE TABLE calon(
+ID_Calon VARCHAR(5) PRIMARY KEY,
+Nama_Calon VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE pemilih(
+ID_Pemilih VARCHAR(5) PRIMARY KEY,
+Nama_Pemilih VARCHAR(25) NOT NULL,
+Nomor_Telepon_Penduduk VARCHAR(10) NOT NULL,
+ID_Calon VARCHAR(5),
+FOREIGN KEY (ID_Calon) REFERENCES calon (ID_Calon)
+);
+
+CREATE TABLE pemilu(
+ID_Calon VARCHAR(5),
+ID_Pemilih VARCHAR(5),
+FOREIGN KEY (ID_Calon) REFERENCES calon (ID_Calon),
+FOREIGN KEY (ID_Pemilih) REFERENCES pemilih (ID_Pemilih)
+);
+
+INSERT INTO calon(ID_Calon, Nama_Calon)
+VALUES ('PR001', 'Dennis Wicaksana'),
+('PR002', 'Arya Gunawan');
+
+INSERT INTO pemilih(ID_Pemilih, Nama_Pemilih, Nomor_Telepon_Penduduk, ID_Calon)
+VALUES('PD001', 'Anna', '2031203', 'PR001'),
+('PD002', 'Sukijah', '2301223', 'PR001'),
+('PD003', 'Kiri', '2033013', 'PR001'),
+('PD004', 'Kana', '2334059', 'PR002'),
+('PD005', 'Okta', '9332333', 'PR002');
+
+INSERT INTO pemilu(ID_Calon, ID_Pemilih)
+VALUES('PR001', 'PD001'),
+('PR001', 'PD002'),
+('PR001', 'PD004'),
+('PR002', 'PD003'),
+('PR002', 'PD005');
+
+
+2.
+
+CREATE DATABASE rumahmakan;
+
+USE rumahmakan;
+
+CREATE TABLE menu(
+ID_Menu VARCHAR(5) PRIMARY KEY,
+Nama_Menu VARCHAR(25),
+Harga INTEGER NOT NULL,
+FOREIGN KEY (Nama_Menu) REFERENCES kategori (Nama_Menu)
+);
+
+CREATE TABLE orders (
+ID_Order VARCHAR(5) PRIMARY KEY,
+Nomor_Meja VARCHAR(5) NOT NULL,
+Jam_Masuk TIME NOT NULL,
+Jam_Keluar TIME NOT NULL
+);
+
+
+CREATE TABLE kategori(
+Nama_Menu VARCHAR(20) PRIMARY KEY,
+Kategori VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE transaksi(
+ID_Menu VARCHAR(5),
+ID_Order VARCHAR(5),
+FOREIGN KEY (ID_Menu) REFERENCES menu (ID_Menu),
+FOREIGN KEY (ID_Order) REFERENCES orders (ID_Order)
+);
+
+INSERT INTO Menu(ID_Menu, Nama_Menu, Harga)
+VALUES('MN001', 'Nasi Putih', 5000),
+('MN002', 'Tahu Goreng', 4000),
+('MN003', 'Air Mineral', 3000),
+('MN004', 'Ayam Goreng', 15000);
+
+INSERT INTO Kategori(Nama_Menu, Kategori)
+VALUES('Nasi Putih', 'Makanan Pokok'),
+('Tahu Goreng', 'Lauk'),
+('Air Mineral', 'Minuman'),
+('Ayam Goreng', 'Lauk');
+
+INSERT INTO orders(ID_Order, Nomor_Meja, Jam_Masuk, Jam_Keluar)
+VALUES('OD001', '1', '10:00:00', '11:00:00'),
+('OD002', '2', '11:00:00', '13:00:00'),
+('OD003', '1', '15:00:00', '15:30:00'),
+('OD004', '1', '15:00:00', '15:30:00');
+
+INSERT INTO transaksi(ID_Order, ID_Menu)
+VALUES('OD001', 'MN001'),
+('OD001', 'MN002'),
+('OD001', 'MN003'),
+('OD002', 'MN001'),
+('OD002', 'MN004'),
+('OD003', 'MN002'),
+('OD004', 'MN004');
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,148 @@
+cd C:\xampp\mysql\bin
+mysql -h localhost -u root
+
+
+CREATE DATABASE ikea;
+
+
+SOURCE C:\xampp\mysql\bin\Database\ikea.sql;
+
+USE ikea;
+
+1. 
+
+DELIMITER //
+CREATE PROCEDURE diskon( IN disc INTEGER )
+BEGIN
+SELECT ProductName "Product Name", CONCAT("Rp. ", ROUND(price - (price * disc/100))) "Harga Setelah Diskon"
+FROM products
+GROUP BY 1 ASC
+ORDER BY price
+LIMIT 10;
+END//
+DELIMITER ;
+CALL DISKON(50);
+
+2.
+
+DELIMITER //
+CREATE PROCEDURE counting(IN word CHAR(100))
+BEGIN
+ DECLARE temp CHAR(100);
+ DECLARE temp2 CHAR(20);
+ DECLARE ctr INTEGER;
+ DECLARE n INTEGER;
+     DECLARE stringCount INTEGER;
+ SET temp=word;
+ SET ctr = 0;
+ counts: LOOP
+  SET n = 1;
+  SET temp2= LEFT(temp, LOCATE(' ',temp,1));
+  IF LOCATE(' ',temp,1)<=>0 THEN SET temp2=temp; END IF;
+  countss:LOOP
+   IF ASCII(SUBSTRING(temp2,n,1)) > 64 AND ASCII(SUBSTRING(temp2,n,1)) < 91 OR ASCII(SUBSTRING(temp2,n,1)) >96 AND ASCII(SUBSTRING(temp2,n,1)) <123 THEN SET ctr = ctr +1; LEAVE countss;END IF;
+   SET n = n+1;
+   IF n > LENGTH(temp2) THEN LEAVE countss; END IF;
+  END LOOP countss;
+  SET temp = RIGHT(temp,LENGTH(temp)-LOCATE(' ',temp,1));
+  IF temp<=> temp2 THEN LEAVE counts;end IF;
+ END LOOP counts;
+    SELECT ctr AS 'Total Kata';
+END//
+DELIMITER ;
+
+CALL counting('i tot i taw a putty tat');
+CALL counting('Be Mature is A Must Be Childis is A Need');
+
+3.
+
+DELIMITER //
+CREATE PROCEDURE primecheck(IN angka INTEGER)
+BEGIN
+DECLARE jawaban CHAR(20);
+CASE 
+WHEN angka = 2 OR angka = 3 OR angka = 5 OR angka = 7 THEN SET jawaban = CONCAT('Prima');
+WHEN angka % 2 <=> 0 OR angka % 3 <=> 0 OR angka % 5 <=> 0 OR angka %7 <=> 0 THEN SET jawaban = CONCAT('Bukan Prima');
+ELSE SET jawaban=CONCAT('Prima');
+END CASE;
+SELECT jawaban AS 'Jawaban';
+END//
+DELIMITER ;
+
+CALL primecheck(7);
+CALL primecheck(20);
+
+4.
+DELIMITER //
+CREATE PROCEDURE box(IN x INTEGER, IN y INTEGER)
+    BEGIN 
+        DECLARE a INTEGER;
+        DECLARE res VARCHAR(255);
+
+        DECLARE h VARCHAR(255);
+        DECLARE v VARCHAR(255);
+
+
+        DECLARE h_length VARCHAR(255);
+        DECLARE v_length VARCHAR(255);  
+
+        DECLARE h_ctr INTEGER;      
+        DECLARE v_ctr INTEGER;
+
+        DECLARE down INTEGER;
+        SET down = 0;
+
+        SET h_ctr = 0;
+        SET v_ctr = 0;
+
+        SET h = "";
+        SET v = "";
+
+        SET h_length = x * y + 1;
+        SET v_length = x * y - 1;
+
+        SET a = 0;
+        SET res = "";
+        WHILE a <= x DO 
+            WHILE h_ctr < x DO 
+                SET res = CONCAT(res, "+", LPAD("", h_length / x - 1, '-'));
+                SET h_ctr = h_ctr + 1;
+            END WHILE;
+            SET h_ctr = 0;
+            SET res = CONCAT(res, '+\n');
+            IF a != x THEN 
+                IF a = 0 OR a = (x-1) THEN
+                    WHILE down < y - 2 DO 
+                        WHILE v_ctr < x DO 
+                            SET res = CONCAT(res, "|", LPAD("", h_length / x - 1, " "));
+                            SET v_ctr = v_ctr + 1;
+                        END WHILE;
+                        SET v_ctr = 0;                   
+                        SET res = CONCAT(res, "|\n");
+                        SET down = down + 1;                    
+                    END WHILE;
+                    SET down = 0;                
+                ELSE
+                    WHILE down <= y - 2 DO 
+                        WHILE v_ctr < x DO 
+                            SET res = CONCAT(res, "|", LPAD("", h_length / x - 1, " "));
+                            SET v_ctr = v_ctr + 1;
+                        END WHILE;
+                        SET v_ctr = 0;                   
+                        SET res = CONCAT(res, "|\n");
+                        SET down = down + 1;                    
+                    END WHILE;
+                    SET down = 0;                
+                END IF;
+
+            END IF;
+
+                
+            SET a = a + 1;
+        END WHILE;
+        SELECT res AS "Box";
+    END//
+DELIMITER ;
+CALL box(2,5);
+CALL box(3,5);
+

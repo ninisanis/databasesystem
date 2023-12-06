@@ -1,0 +1,108 @@
+ cd C:\xampp\mysql\bin
+ mysql -h localhost -u root
+
+
+CREATE DATABASE ikea;
+
+C:\xampp\mysql\bin\Database
+
+SOURCE C:\xampp\mysql\bin\Database\ikea.sql;
+
+1. 
+
+SELECT CONCAT(e.FirstName, ' ', e.LastName) Nama, j.Salary
+FROM employees e
+JOIN jobs j USING(JobID)
+ORDER BY 1;
+
+2. 
+
+SELECT s.ShelfID
+FROM Products p
+JOIN Shelves s USING(ShelfID)
+GROUP BY 1
+HAVING COUNT(p.Stock);
+
+3.
+
+SELECT JobDesc AS "Jobs", COUNT(*) AS "Jumlah"
+FROM jobs AS j, employees AS e
+WHERE j.JobID = e.JobID
+GROUP BY 1
+ORDER BY 1;
+
+4. 
+
+SELECT p.ProductName
+FROM products p
+JOIN producttype t ON (p.TypeID = t.TypeID)
+WHERE t.TypeName LIKE "%METOD%"
+UNION
+SELECT CONCAT("Found ", COUNT(p.ProductName), " results")
+FROM products p
+JOIN producttype t ON (p.TypeID = t.TypeID)
+WHERE t.TypeName LIKE "%METOD%";
+
+5. 
+
+SELECT CONCAT_WS(' ', e.FirstName, e.LastName) AS "Name", e.employeeID
+FROM employees e
+JOIN employees m ON m.ManagerID = e.EmployeeID
+GROUP BY m.ManagerID;
+
+6. 
+
+SELECT r.F_OrderID AS "OrderID",
+SUM(o.Price) AS "Total Price"
+FROM restaurant r
+JOIN forderdetails o ON r.F_OrderID = o.F_OrderID
+WHERE MONTH(r.F_OrderDate) = 1
+GROUP BY r.F_OrderID
+UNION
+SELECT "Total",
+SUM(o.Price)
+FROM restaurant r
+JOIN forderdetails o ON r.F_OrderID = o.F_OrderID
+WHERE MONTH(r.F_OrderDate) = 1
+GROUP BY "Total";
+
+7.
+
+(SELECT CONCAT_WS(' ', e.FirstName, e.LastName) AS "Name",
+j.JobDesc AS "Job",
+COUNT(r.EmployeeID) AS "Work"
+FROM employees e
+JOIN jobs AS j ON e.JobID = j.JobID
+JOIN restaurant AS r ON e.EmployeeID = r.EmployeeID
+GROUP BY 1)
+UNION
+(SELECT
+CONCAT_WS(' ', e.FirstName, e.LastName) AS "Name",
+j.JobDesc AS "Job",
+COUNT(o.EmployeeID) AS "Work"
+FROM employees e
+JOIN jobs AS j ON e.JobID = j.JobID
+JOIN orders AS o ON e.EmployeeID = o.EmployeeID
+GROUP BY 1)
+ORDER BY 3 DESC;
+
+8. 
+
+
+SELECT OrderID, SUM(Price)
+FROM orderdetails
+WHERE Price > 500000
+GROUP BY OrderID
+UNION
+SELECT F_OrderID, SUM(Price)
+FROM forderdetails
+WHERE Price > 500000
+GROUP BY F_OrderID;
+
+9. 
+
+SELECT CONCAT_WS(' ', e.FirstName, e.LastName) AS "Name", GROUP_CONCAT(CONCAT_WS(' ', m.FirstName, m.LastName)) AS "Employee"
+FROM employees e
+JOIN employees m ON m.ManagerID = e.EmployeeID
+GROUP BY m.managerID;
+

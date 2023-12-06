@@ -1,0 +1,37 @@
+cd C:\xampp\mysql\bin
+mysql -h localhost -u root
+
+CREATE DATABASE letters;
+
+USE letters;
+
+DELIMITER //
+CREATE PROCEDURE draw_a(IN number INTEGER)
+BEGIN
+DECLARE output VARCHAR(255);
+DECLARE error VARCHAR(50);
+DECLARE n INTEGER;
+DECLARE SEPARATOR, TRACKER;
+SET error = 'Error: NO even number is allowed';
+SET n = 0;
+
+
+CASE
+WHEN number % 2 = 0 THEN
+SET output = error;
+ELSE
+SET output = CONCAT(REPEAT(A, SEPARATOR, 2 * number + 1, TRACKER(5 * number)))
+END CASE;
+END $
+DELIMITER ;
+
+CALL draw_a(3);
+
+
+
+
+
+
+
+IF A n % 2 = 0 maka tampilkan pesan error
+ELSE maka A akan membentuk bangunan A dengan jumlah letter sesuai dengan kelipatan n

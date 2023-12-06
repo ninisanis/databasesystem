@@ -1,0 +1,109 @@
+cd C:\xampp\mysql\bin
+mysql -h localhost -u root
+
+
+CREATE DATABASE ikea;
+
+
+SOURCE C:\xampp\mysql\bin\Database\ikea.sql;
+
+
+1.
+
+DELIMITER $
+CREATE PROCEDURE search_product(IN product VARCHAR(100))
+BEGIN
+    DECLARE ctr INTEGER;
+    DECLARE jumlah INTEGER;
+    DECLARE total VARCHAR(20);
+    DECLARE hold VARCHAR(100);
+    DECLARE c_product CURSOR FOR
+        SELECT ProductName
+        FROM products
+        WHERE ProductName LIKE CONCAT ('%',product,'%');
+    OPEN c_product;
+    SELECT COUNT(*) INTO jumlah
+    FROM products
+    WHERE ProductName LIKE CONCAT('%',product,'%');
+    CREATE TEMPORARY TABLE outputs(hasil VARCHAR(50));
+    IF(jumlah<=>0) THEN
+        INSERT INTO outputs(hasil) VALUES('Data Not Found');
+    ELSE
+        SET total = CONCAT(jumlah,'Data Found');
+        Insert into outputs(hasil)values(total);
+        SET ctr = 0;
+        WHILE(ctr<jumlah)DO 
+            FETCH c_product INTO hold;
+            INSERT INTO outputs(hasil) VALUES(hold);
+            SET ctr = ctr +1;
+        END WHILE;
+        SELECT hasil AS "Search Product" From ouputs ORDER by 1;
+    END IF;
+    CLOSE c_product;
+    DROP TEMPORARY TABLE outputs;
+END $ 
+DELIMITER ;
+
+CALL search_product('shelving');
+
+2.
+
+DELIMITER $
+CREATE PROCEDURE search_people(IN input VARCHAR(100))
+BEGIN
+    DECLARE jumlah INTEGER;
+    DECLARE id, nama, kota, nomor VARCHAR(30);
+    DECLARE cursorData CURSOR FOR
+        SELECT EmployeeID, CONCAT(FirstName,' ',LastName),City, PostalCode, PhoneNumber
+        FROM employees
+        WHERE EmployeeID = input;
+    OPEN cursorData;
+    CREATE TEMPORARY TABLE result(hasil VARCHAR(255));
+    SELECT COUNT(*) INTO jumlah FROM employees WHERE EmployeeID = input;
+    IF jumlah = 0 THEN
+    ELSE
+        FETCH cursorData INTO id, nama, kota, post, nomor;
+        INSERT INTO result VALUES('ID Found!');
+        INSERT INTO result VALUES(CONCAT('Employee ID: ', id));
+        INSERT INTO result VALUES(CONCAT('Full Name  : ', nama));
+        INSERT INTO result VALUES(CONCAT('City       : ', kota));
+        INSERT INTO result VALUES(CONCAT('Postal Code: ', post));
+        INSERT INTO result VALUES(CONCAT('Phone Number: ', nomor));
+    END IF;
+    close cursorData;
+    SELECT hasil 'Result' FROM result;
+    DROP TEMPORARY TABLE result;
+END $
+DELIMITER ;
+
+3.
+
+DELIMITER $
+CREATE FUNCTION email_special(text1 VARCHAR(100),text2 VARCHAR(100))
+RETURNS VARCHAR(100)
+BEGIN
+	RETURN(CONCAT(LOWER(text1),'.',LOWER(text2),'@ikeamail.com'));
+END $
+DELIMITER ;
+--cek
+select concat(firstName,'',lastName) as 'Full Name', email_special(firstName, lastName) as 'Email' from employees;
+
+4.
+
+CREATE TABLE product_history(
+    articleid VARCHAR(15),
+    productname VARCHAR(40),
+    stock INTEGER,
+    stock_changes INTEGER,
+    update_date DATE
+);
+DELIMITER $
+CREATE TRIGGER insert_history
+AFTER UPDATE ON products FOR EACH ROW
+BEGIN
+    INSERT INTO product_history
+    VALUES (NEW.articleid, NEW.productname, OLD.stock, NEW.stock - OLD.stock, CAST(CURRENT_TIMESTAMP AS DATE));
+END $
+DELIMITER ;
+UPDATE products SET stock = 40 WHERE ArticleID = '999.322.72';
+

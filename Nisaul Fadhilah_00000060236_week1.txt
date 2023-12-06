@@ -1,0 +1,42 @@
+Nama: Nisa'ul Fadhilah
+NIM : 0000060236
+
+
+Database Rumah Sakit
+
+Data pasien
+1. Nama
+2. Alamat
+3. Usia
+4. Golongan darah
+5. Jenis Kelamin
+6. Agama
+7. Pekerjaan
+8. Tinggi Badan
+9. Berat Badan
+10. Tekanan darah
+11. Nama penanggungjawab/Keluarga
+12. Tempat dan tanggala lahir.
+13. Status pernikahan.
+14. No Hp Keluarga
+
+Fasilitas dan penanganan
+1. Jenis Perawatan
+2. Resep Obat
+3. Dokter dan tenaga medis Yang menangani
+4. tanggal dan waktu terjadinya tindakan.
+5. Hasil amnesis pasien (berupa keluhan serta riwayat penyakit)
+6. Hasil pemeriksaan fisik
+7. Diagnosa
+8. Bentuk pengobatan
+9. Ruangan (nama kamar dan jenis kamar)
+10. Alat/Mesin medis yang digunakan
+
+Admministrasi dan keuangan
+1. Waktu masuk
+2. Waktu keluar
+3. Status Pembayaran
+4. Jenis pembayaran
+
+
+

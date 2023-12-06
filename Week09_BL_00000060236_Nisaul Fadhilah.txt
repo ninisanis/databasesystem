@@ -1,0 +1,117 @@
+cd C:\xampp\mysql\bin
+mysql -h localhost -u root
+
+
+CREATE DATABASE ikea;
+
+
+SOURCE C:\xampp\mysql\bin\Database\ikea.sql;
+
+1.
+
+SELECT CONCAT(e.FirstName, ' ', e.LastName) Name,
+d.DeptName Department
+FROM employees e, depts d
+WHERE d.DeptID = e.DeptID
+ORDER BY 2 ASC, 1 ASC;
+
+2. 
+
+SELECT CONCAT(e.FirstName, ' ', e.LastName) 'Employee Name',
+CONCAT(m.FirstName, ' ', m.LastName) 'Manager Name'
+FROM employees e
+JOIN employees m ON (m.EmployeeID = e.ManagerID)
+ORDER BY 2,1;
+
+3.
+
+SELECT CONCAT(e.FirstName, ' ', e.LastName) Name,
+GROUP_CONCAT(o.OrderID SEPARATOR " - ") Orders
+FROM Orders o
+JOIN employees e USING (EmployeeID)
+GROUP BY 1
+ORDER BY 1;
+
+4.
+
+SELECT p.ProductName 'Product Name',
+SUM(od.Qty) 'Total Sold'
+FROM orderdetails od
+JOIN products p USING (ArticleID)
+GROUP BY od.ArticleID
+ORDER BY 2 DESC;
+ 
+5.
+
+SELECT p.ProductName "Product Name", CASE
+WHEN (SELECT SUM(od.Qty) FROM orderdetails od WHERE od.ArticleID = p.ArticleID GROUP BY od.ArticleID) IS NULL
+THEN 0
+ELSE (SELECT SUM(od.Qty) FROM orderdetails od WHERE od.ArticleID = p.ArticleID GROUP BY od.ArticleID)
+END "Total Sold"
+FROM products p
+ORDER BY 2 DESC;
+
+6.
+
+SELECT o.OrderID 'Order ID', 
+SUM(od.Price) Total, 
+CONCAT(e.FirstName, ' ', e.LastName) 'In Charge'
+FROM orders o
+JOIN orderdetails od USING (OrderID)
+JOIN employees e USING (EmployeeID)
+GROUP BY 1
+ORDER BY 3;
+
+7.
+
+SELECT CONCAT(e.FirstName, " ", e.LastName) Employee, TRUNCATE(SUM((12/100)*od.Price),0) Contribution, TRUNCATE((5/100)*j.Salary,0) Bonus
+FROM orders o
+JOIN orderdetails od USING(OrderID)
+JOIN employees e USING(EmployeeID)
+JOIN jobs j ON(e.JobID = j.JobID)
+GROUP BY o.EmployeeID
+HAVING ((12/100)*SUM(od.Price)) > 500000
+ORDER BY 2 DESC;
+
+8.
+
+SELECT CONCAT(RPAD(CONCAT(e.FirstName, " ", e.LastName), 25, " "), "works ",
+(CASE
+WHEN LEFT(j.JobDesc, 10) = "Restaurant"
+THEN "in "
+ELSE "as "
+END),
+(CASE
+WHEN (ASCII(j.JobDesc) = 65 OR ASCII(j.JobDesc) = 73 OR ASCII(j.JobDesc) = 85 OR ASCII(j.JobDesc) = 69 OR ASCII(j.JobDesc) = 79)
+THEN "an "
+ELSE "a  "
+END),
+RPAD(j.JobDesc, 40, " "), "in ", d.DeptName, " Department") "Employees Information"
+FROM employees e
+JOIN jobs j USING(JobID)
+JOIN depts d USING(DeptID)
+ORDER BY j.JobDesc, d.DeptName;
+
+9.
+
+SET @@AUTOCOMMIT = 0;
+
+10.
+
+UPDATE jobs SET Salary = 0;
+
+11.
+
+SAVEPOINT ikea_gaji_nol;
+
+12.
+
+UPDATE employees SET FirstName = "Tommy";
+
+13.
+
+ROLLBACK TO ikea_gaji_nol;
+
+14.
+
+ROLLBACK;

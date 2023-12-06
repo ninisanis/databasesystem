@@ -1,0 +1,217 @@
+ cd C:\xampp\mysql\bin
+ mysql -h localhost -u root
+
+
+1. Membuat database dan tabel 
+
+//Membuat database baru
+CREATE DATABASE company;
+
+//Masuk ke dalam database company
+USE company;
+
+//Melihat isi database company (tabel-tabelnya)
+SHOW TABLES;
+
+//membuat tabel untuk job
+CREATE TABLE job(
+ job_id CHAR(5) PRIMARY KEY,
+ job_title VARCHAR(30) NOT NULL,
+ min_salary INTEGER NOT NULL,
+ max_salary INTEGER NOT NULL
+);
+
+//Membuat tabel untuk lokasi
+CREATE TABLE location(
+ location_id CHAR(5) PRIMARY KEY,
+ address VARCHAR(100) NOT NULL,
+ postal_code CHAR(5) NOT NULL,
+ city VARCHAR(20) NOT NULL
+);
+
+//Membuat tabel untuk department
+CREATE TABLE department(
+ department_id CHAR(5) PRIMARY KEY,
+ department_name VARCHAR(25) NOT NULL,
+ manager_id CHAR(5) NOT NULL,
+ location_id CHAR(5) NOT NULL,
+ UNIQUE(department_name)
+);
+
+//Membuat tabel untuk employee
+CREATE TABLE employee(
+ employee_id CHAR(5) PRIMARY KEY,
+ first_name VARCHAR(15) NOT NULL,
+ last_name VARCHAR(20),
+ birth_date DATE NOT NULL,
+ email VARCHAR(30) NOT NULL,
+ phone_number VARCHAR(12) NOT NULL,
+ hire_date DATE NOT NULL,
+ salary INTEGER NOT NULL,
+ job_id CHAR(5),
+ department_id CHAR(5),
+ FOREIGN KEY (job_id) REFERENCES job(job_id),
+ FOREIGN KEY (department_id) REFERENCES department(department_id)
+);
+
+//Melihat isi database company (tabel-tabelnya)
+SHOW TABLES;
+
+
+
+2. Memasukkan data ke dalam tabel 
+
+//Memasukkan data dari tabel location
+INSERT INTO location(location_id, address, postal_code, city)
+VALUES ('L0001', 'Grand Indonesia lT. 9, Jalan M.H. Thamrin NO 1, Jakarta Pusat', '10310', 'Jakarta'),
+('L0002', 'Pasific Place Lt. 7. Jendral Sudirman Kav. 52-53, Jakarta Selatan', '12190', 'Jakarta');
+
+ //Memasukkan data dari tabel job
+INSERT INTO job( job_id, job_title, min_salary, max_salary)
+VALUES ('J0001', 'President', 10000000, 15000000),
+('J0002', 'Accountant', 30000000, 45000000),
+('J0003', 'Accounting Manager', 50000000, 70000000),
+('J0004', 'IT Support', 35000000, 50000000),
+('J0005', 'Programmer', 40000000, 55000000),
+('J0006', 'Marketing Manager', 60000000, 80000000),
+('J0007', 'Marketing Representative', 45000000, 55000000),
+('J0008', 'HR Manager', 50000000, 65000000),
+('J0009', 'HR Representative', 35000000, 45000000);
+
+//Memasukkan data dari tabel department
+INSERT INTO department (department_id, department_name, manager_id, location_id)
+VALUES ('D0001', 'Accounting', 'E0002', 'L0002'),
+('D0002', 'IT', 'E0004', 'L0001'),
+('D0003', 'Human Resource', 'E0005', 'L0001'),
+('D0004', 'Marketing', 'E0010', 'L0002');
+
+
+//Memasukkan data dari tabel employee
+INSERT INTO employee (employee_id, first_name, last_name, birth_date, email, phone_number, hire_date, salary, job_id, department_id)
+VALUES ('E0001', 'Hideyoshi', 'Kinoshota', '1975-08-24', 'Hideyoshi.kino@gmail.com', '081689231099', '2002-01-11', 5000000, 'J0004', 'D0002'),
+('E0002', 'Sara', ' ', '1970-01-11', 'Sara@rocketmail.com', '089281849321', '2000-12-10', 5500000, 'J0003', 'D0001'),
+('E0003', 'Kazuyoshi', ' ', '1968-02-28', 'Kazuyoshi@gmail.com', '085252778438', '1999-07-25', 4500000, 'J0009', 'D0003'),
+('E0004', 'Shoichiro', 'Yukimura', '1967-02-01', 'Shoichiro.yuki@yahoo.com', '089928317822', '2000-04-17', '4500000', 'J0005', 'D0002'),
+('E0005', 'Chibi', 'Usa', '1950-06-30', 'Chibi.usa@gmail.com', '081329883547', '2001-08-10', 5000000, 'J0008', 'D0003'),
+('E0006', 'Yoshika', 'Saehara', '1977-10-21', 'Yoshika.sae@yahoo.com', '081299284628', '2005-11-18', 4500000, 'J0008', 'D0003'),
+('E0007', 'Kagami', 'Mikage', '1970-10-08', 'Kagami.mikage@rocketmail.com', '089628371298', '2002-05-15', 12500000, 'J0001', ' '),
+('E0008', 'Reiko', 'Shindo', '1984-11-14', 'Reiko.shindo@live.com', '085290802938', '2002-09-01', 3500000, 'J0004', 'D0002'),
+('E0009', 'Youko', 'Kuriki', '1970-03-19', 'Youko.kuriki@hotmail.com', '089922781924', '2007-04-08', 5500000, 'J0002', 'D0001'),
+('E0010', 'Mana', 'Ichihashi', '1976-11-21', 'Mana.ichiashi@gmail.com', '087888291322', '2003-11-20', 6000000, 'J0006', 'D0004'),
+('E0011', 'Kyoko', 'Aoi', '1965-09-30', 'Kyoko.aoi@gmail.com', '081290208851', '2005-05-13', 8000000, 'J0009', 'D0003');
+
+SELECT department_id, department_name, manager_id, location_id
+FROM department;
+
+atau
+
+SELECT * FROM department;
+
+SELECT job_id, job_title, min_salary, max_salary
+FROM job;
+
+atau
+
+SELECT * FROM job;
+
+SELECT location_id, address, postal_code, city
+FROM location;
+
+atau
+
+SELECT * FROM location;
+
+SELECT employee_id, first_name, last_name, birth_date, email, phone_number, hire_date, salary, job_id, department_id
+FROM employee;
+
+
+
+3. Membuat perubahan data dalam database 
+
+a. 
+
+UPDATE employee
+SET first_name = 'Pedo',
+last_name = 'Bear',
+email ='Pedo.bear@gmail.com'
+WHERE employee_id = 'E0005';
+
+SELECT employee_id, first_name, last_name, birth_date, email, phone_number, hire_date, salary, job_id, department_id
+FROM employee;
+
+atau
+
+SELECT * FROM employee;
+
+
+b. 
+
+UPDATE employee
+SET salary = salary - 100000;
+
+SELECT employee_id, first_name, last_name, birth_date, email, phone_number, hire_date, salary, job_id, department_id
+FROM employee;
+
+
+c. 
+
+UPDATE employee
+SET department_id = 'D0002',
+job_id = 'J0005'
+WHERE employee_id = 'E0002';
+
+UPDATE employee
+SET department_id = 'D0001',
+job_id = 'J0003'
+WHERE employee_id ='E0004';
+
+SELECT employee_id, first_name, last_name, birth_date, email, phone_number, hire_date, salary, job_id, department_id
+FROM employee;
+
+
+d. 
+
+DELETE FROM employee
+WHERE employee_id = 'E0004';
+
+
+e. 
+
+INSERT INTO employee (employee_id, first_name, last_name, birth_date, email, phone_number, hire_date, salary, job_id, department_id)
+VALUES ('E0012', 'Usui', 'Takumi', '1982-04-27', 'Usui.takumi@gmail.com', '085309009211', '2022-09-20', 4500000, 'J0001', 'D0004');
+
+
+f. 
+
+UPDATE employee
+SET salary = salary + 200000
+WHERE employee_id = 'E0012';
+
+
+g.
+
+UPDATE employee
+SET salary = salary + (salary*0.1)
+WHERE month(birth_date) in (11);
+
+
+4. Menghapus tabel serta database 
+
+
+DROP TABLES employee, 
+department, 
+job, 
+location;
+
+DROP DATABASE company;
+
+
+5. Bagaimana jika kolom manager_id pada tabel department merupakan foreign key yang
+menunjuk kolom employee_id pada tabel employee? 
+
+
+Hal ini akan menimbulkan masalah "chicken and egg problem",sehingga ketika ingin menghapus tabel employee/ DROP TABLE employee;
+tidak akan dapat dihapus/ dikosongkan karena Primary Key employee seperti sudah tersangkut dengan Foreign Key yang berasal dari
+tabel lainnya/ The Circular Reference yaitu manager_id pada tabel department. Solusinya yaitu membuat kolom baru dan constraint baru/
+menggunakan metode ALTER TABLE DROP CONSTRAINT atau ADD CONSTRAINT yang berguna untuk menghapus kendala constraint(seperti
+UNIQUE, NOT NULL, PRIMARY KEY, FOREIGN KEY, CHECK, dsb) serta untuk membuat constraint/ batasan setelah tabel tersebut dibuat.
